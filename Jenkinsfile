@@ -1,21 +1,23 @@
 pipeline {
-    agent {
-        docker {
-            // Specify the Docker image to be used as an agent
-            image 'your_docker_image:tag' // Replace 'your_docker_image:tag' with your actual Docker image
-            args '-v /var/run/docker.sock:/var/run/docker.sock' // Mount Docker socket for Docker commands in Jenkins
-        }
-    }
+    agent any // Allows Jenkins to run the pipeline on any available agent
+
     stages {
-        stage('Build') {
+        stage('Checkout') {
             steps {
-                // Define your build steps here
-                sh 'javac HelloWorld.java' // Example: Compile Java code
+                checkout scm // Fetches the code from your Git repository
             }
         }
+
+        stage('Build') {
+            steps {
+                // Compile your Java code
+                sh 'javac HelloWorld.java'
+            }
+        }
+
         stage('Run') {
             steps {
-                // Run Java program
+                // Run your Java program
                 sh 'java HelloWorld'
             }
         }
